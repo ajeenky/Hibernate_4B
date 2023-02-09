@@ -1,5 +1,8 @@
 package many.to.one.mapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,7 +19,6 @@ public class Test {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		
-//		we have to set multiple answers because we are mapping to many answers for one question
 		Answer ans1 = new Answer();
 		ans1.setAnswer("Programming language");
 		
@@ -26,17 +28,22 @@ public class Test {
 		Answer ans3 = new Answer();
 		ans3.setAnswer("RAM");
 		
-//		we have to set question for question table
 		Question question = new Question();
 		question.setQuestion("What is JAVA?");
 		
-//		we are passing the same question to each answer in order to achieve many.to.one. relation
 		ans1.setQuestion(question);
 		ans2.setQuestion(question);
 		ans3.setQuestion(question);
 		
-//		because we are going to use question's primary key in answers table as foreign key
-//		thats why we are saving question first and then saving the answers
+//		saving the multiple answers in a list
+		List<Answer> list = new ArrayList<Answer>();
+		list.add(ans1);
+		list.add(ans2);
+		list.add(ans3);
+		
+//		setter method of answers list
+		question.setAnswer(list);
+		
 		session.save(question);
 		session.save(ans1);
 		session.save(ans2);
